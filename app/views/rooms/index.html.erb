@@ -1,0 +1,62 @@
+<div id= "room-id" data-room-id="<%= @room.try(:id) %>"></div>
+<div id= "user-id" data-user-id="<%= current_user.id %>"></div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-3 room-sidebar">        
+      <div class="user-chat-list">
+        <div class="user-form">
+          <nav class="navbar navbar-light bg-light">
+            <b class="navbar-brand"><%= current_user.username %></b>
+          </nav>   
+          <hr>      
+          <%= render 'form', room: Room.new %>
+          <hr>
+        </div>
+        <div class="room-list">
+          <% @rooms.each do |room| %> 
+            <%= link_to room, class: 'room-link' do %>
+              <%= active_class = (@room == room) ? 'active' : ''%>
+              <div class="card <%= active_class %>" >
+                <div class="card-body">
+                  <%= room.name %><br>
+                  <small class="member-count"><%= room.users.uniq.count %> Members </small>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="chat-info">    
+        <% if @room.present? %>
+          <div class="chat-room">
+            <nav class="navbar navbar-light bg-light">
+              <span class="navbar-brand" href="#"><%= @room.name %></span>
+            </nav>
+            <div id="messages">
+              <% @room.messages.each do |message| %>
+                <%= render 'messages/message', message: message %>
+              <% end %>
+              </div>
+              <div class="chat-box">
+              <%= render 'messages/form', message: Message.new , room: @room%>
+            </div>  
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+debugger;
+  window.reload = function () {
+    setTimeout(appeardiv,5000);
+  }
+  function appeardiv() {
+    document.getElementById('messages');
+  }
+  
+</script>
